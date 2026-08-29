@@ -13,7 +13,7 @@ public class ConfigProvider {
             properties.load(input);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Не вдалося завантажити application.properties");
+            throw new RuntimeException("Could not download application.properties");
         }
     }
 
