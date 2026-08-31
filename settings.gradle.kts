@@ -1,0 +1,1 @@
+rootProject.name = "HomeWork6_API_testing"
