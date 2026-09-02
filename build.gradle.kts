@@ -16,7 +16,7 @@ allure {
 val aspectjweaver: Configuration by configurations.creating
 dependencies {
     // Playwright для виконання запитів
-    implementation("com.microsoft.playwright:playwright:1.41.0")
+    implementation("io.rest-assured:rest-assured:5.4.0")
 
     // TestNG для запуску тестів
     testImplementation("org.testng:testng:7.9.0")

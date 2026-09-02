@@ -3,12 +3,9 @@
 
     <!-- preserve-order="true" гарантує, що тести підуть зверху вниз -->
     <test name="Authentication Tests" preserve-order="true">
-        <classes>
-            <class name="tests.ApiLoginTest"/>
-            <class name="tests.ApiPromoCodeActivationTest"/>
-            <class name="tests.ApiRegistrationTest"/>
-            <class name="tests.ApiLogOutTest"/>
-        </classes>
+        <packages>
+            <package name="tests"/>
+        </packages>
     </test>
 
 </suite>

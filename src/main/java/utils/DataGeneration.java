@@ -1,7 +1,7 @@
 package utils;
 
 public class DataGeneration {
-    public String generateEmail(){
+    public static String generateEmail(){
         String randomEmail = "oleksandrhundertailo+" + System.currentTimeMillis() + "@sharkscode.com";
         return randomEmail;
     };
