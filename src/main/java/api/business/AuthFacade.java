@@ -16,24 +16,26 @@ public class AuthFacade {
         this.authService = new AuthService();
     }
 
-
-    @Step("Authorize user with email: {email}")
-    public Response emailLogin(String email, String password) {
-        LoginRequest payload = new LoginRequest(email, password);
-        Response response = authService.postLogin(payload);
-
+    private void parseAndStoreToken(Response response, String action) {
         ObjectMapper mapper = new ObjectMapper();
-
         try {
             AuthResponse authResponse = mapper.readValue(response.asString(), AuthResponse.class);
             if (authResponse.status) {
                 SessionContext.setToken(authResponse.user.token);
             } else {
-                throw new RuntimeException("Login failed. Status: " + response.statusCode() + " Body: " + response.asString());
+                throw new RuntimeException(action + " failed. Status: " + response.statusCode()
+                        + " Body: " + response.asString());
             }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse login response: " + e.getMessage());
+            throw new RuntimeException("Failed to parse " + action.toLowerCase() + " response: " + e.getMessage());
         }
+    }
+
+    @Step("Authorize user with email: {email}")
+    public Response emailLogin(String email, String password) {
+        LoginRequest payload = new LoginRequest(email, password);
+        Response response = authService.postLogin(payload);
+        parseAndStoreToken(response, "Login");
 
         return response;
     }
@@ -42,19 +44,7 @@ public class AuthFacade {
     public Response emailRegister(String email, String password) {
         RegistrationRequest payload = new RegistrationRequest(email, password);
         Response response = authService.postRegistration(payload);
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            AuthResponse authResponse = mapper.readValue(response.asString(), AuthResponse.class);
-            if (authResponse.status) {
-                SessionContext.setToken(authResponse.user.token);
-            } else {
-                throw new RuntimeException("Registration failed. Status: " + response.statusCode() + " Body: " + response.asString());
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to parse registration response: " + e.getMessage());
-        }
+        parseAndStoreToken(response, "Registration");
 
         return response;
     }
