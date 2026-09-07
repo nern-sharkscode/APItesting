@@ -10,26 +10,6 @@ import io.restassured.response.Response;
 import utils.SessionContext;
 
 public class AuthFacade {
-    private AuthService authService;
-
-    public AuthFacade() {
-        this.authService = new AuthService();
-    }
-
-    private void parseAndStoreToken(Response response, String action) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            AuthResponse authResponse = mapper.readValue(response.asString(), AuthResponse.class);
-            if (authResponse.status) {
-                SessionContext.setToken(authResponse.user.token);
-            } else {
-                throw new RuntimeException(action + " failed. Status: " + response.statusCode()
-                        + " Body: " + response.asString());
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to parse " + action.toLowerCase() + " response: " + e.getMessage());
-        }
-    }
 
     @Step("Authorize user with email: {email}")
     public Response emailLogin(String email, String password) {
@@ -52,5 +32,26 @@ public class AuthFacade {
     @Step("Logout current user")
     public void logOut() {
         SessionContext.clear();
+    }
+
+    private AuthService authService;
+
+    public AuthFacade() {
+        this.authService = new AuthService();
+    }
+
+    private void parseAndStoreToken(Response response, String action) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            AuthResponse authResponse = mapper.readValue(response.asString(), AuthResponse.class);
+            if (authResponse.status) {
+                SessionContext.setToken(authResponse.user.token);
+            } else {
+                throw new RuntimeException(action + " failed. Status: " + response.statusCode()
+                        + " Body: " + response.asString());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse " + action.toLowerCase() + " response: " + e.getMessage());
+        }
     }
 }
