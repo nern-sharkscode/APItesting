@@ -13,8 +13,8 @@ public class ApiLogOutTest extends BaseApiTest {
     public void logOutTest() {
         AuthFacade authFacade = new AuthFacade();
         String randomEmail = DataGeneration.generateEmail();
-        authFacade.emailRegister(randomEmail, ConfigProvider.getPassword());
-        var loginResponse = authFacade.emailLogin(randomEmail, ConfigProvider.getPassword());
+        authFacade.emailRegister(randomEmail, ConfigProvider.getInstance().getPassword());
+        var loginResponse = authFacade.emailLogin(randomEmail, ConfigProvider.getInstance().getPassword());
         Assert.assertEquals(loginResponse.statusCode(),200,"Login failed");
 
         authFacade.logOut();

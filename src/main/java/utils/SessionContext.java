@@ -10,6 +10,7 @@ public class SessionContext {
     public static String getToken() {
         return token;
     }
+
     public static void clear() {
         token = null;
     }

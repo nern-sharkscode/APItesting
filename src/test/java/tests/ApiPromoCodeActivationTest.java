@@ -21,8 +21,8 @@ public class ApiPromoCodeActivationTest extends BaseApiTest {
     public void testActivationPromo() {
         AuthFacade authFacade = new AuthFacade();
         String randomEmail = DataGeneration.generateEmail();
-        authFacade.emailRegister(randomEmail, ConfigProvider.getPassword());
-        authFacade.emailLogin(randomEmail, ConfigProvider.getPassword());
+        authFacade.emailRegister(randomEmail, ConfigProvider.getInstance().getPassword());
+        authFacade.emailLogin(randomEmail, ConfigProvider.getInstance().getPassword());
 
         PromoCodeActivationFacade promoFacade = new PromoCodeActivationFacade();
         Response promoResponse = promoFacade.promoActivation(PROMO_CODE);
