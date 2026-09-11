@@ -10,28 +10,46 @@ import io.restassured.response.Response;
 import utils.SessionContext;
 
 public class AuthFacade {
+    private Response lastResponse;
 
     @Step("Authorize user with email: {email}")
     public Response emailLogin(String email, String password) {
-        LoginRequest payload = new LoginRequest(email, password);
-        Response response = authService.postLogin(payload);
-        parseAndStoreToken(response, "Login");
+        LoginRequest payload = LoginRequest.builder()
+                .email(email)
+                .password(password)
+                .build();
 
+        Response response = authService.postLogin(payload);
+
+        if (response.statusCode() == 200) {
+            AuthResponse authResponse = response.as(AuthResponse.class);
+            if (authResponse.status) {
+                SessionContext.setToken(authResponse.user.token);
+            }
+        }
         return response;
     }
 
     @Step("Register user with email: {email}")
-    public Response emailRegister(String email, String password) {
-        RegistrationRequest payload = new RegistrationRequest(email, password);
-        Response response = authService.postRegistration(payload);
-        parseAndStoreToken(response, "Registration");
+    public AuthFacade emailRegister(String email, String password) {
+        RegistrationRequest payload = RegistrationRequest.builder()
+                .email(email)
+                .password(password)
+                .build();
 
-        return response;
+        this.lastResponse = authService.postRegistration(payload);
+        parseAndStoreToken(this.lastResponse, "Registration");
+
+        return this;
     }
 
     @Step("Logout current user")
     public void logOut() {
         SessionContext.clear();
+    }
+
+    public Response getResponse() {
+        return this.lastResponse;
     }
 
     private AuthService authService;

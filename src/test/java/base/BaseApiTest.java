@@ -8,6 +8,6 @@ public class BaseApiTest {
 
     @BeforeClass
     public void setupApiContext() {
-        RestAssured.baseURI = ConfigProvider.getBaseUrl();
+        RestAssured.baseURI = ConfigProvider.getInstance().getBaseUrl();
     }
 }

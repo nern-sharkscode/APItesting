@@ -4,10 +4,13 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigProvider {
-    private static Properties properties;
+    private Properties properties;
+    private static ConfigProvider instance;
 
-    static {
-        try (InputStream input = ConfigProvider.class.getClassLoader().getResourceAsStream("application.properties")) {
+    private ConfigProvider() {
+        try (InputStream input = getClass()
+                .getClassLoader()
+                .getResourceAsStream("application.properties")) {
             properties = new Properties();
             properties.load(input);
         } catch (Exception e) {
@@ -15,12 +18,19 @@ public class ConfigProvider {
             throw new RuntimeException("Could not download application.properties");
         }
     }
+    public static ConfigProvider getInstance() {
+        if (instance == null) {
+            instance = new ConfigProvider();
+        }
+        return instance;
+    }
 
-    public static String getPassword() {
+
+    public String getPassword() {
         return properties.getProperty("test.password");
     }
 
-    public static String getBaseUrl() {
+    public String getBaseUrl() {
         return properties.getProperty("test.base.url");
     }
 }

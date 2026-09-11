@@ -15,6 +15,10 @@ allure {
 }
 val aspectjweaver: Configuration by configurations.creating
 dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    testCompileOnly("org.projectlombok:lombok:1.18.30")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
     // Rest-assured для виконання запитів
     implementation("io.rest-assured:rest-assured:5.4.0")
 

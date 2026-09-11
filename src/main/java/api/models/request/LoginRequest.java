@@ -1,12 +1,14 @@
 package api.models.request;
 
-public class LoginRequest {
-    public String email;
-    public String password;
-    public String type = "email";
+import lombok.Builder;
+import lombok.Data;
 
-    public LoginRequest(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+@Data
+@Builder
+public class LoginRequest {
+    private String email;
+    private String password;
+
+    @Builder.Default
+    private String type = "email";
 }
